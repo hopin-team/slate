@@ -4,7 +4,7 @@
   },
   "name": "@hopinhq/slate",
   "description": "A completely customizable framework for building rich text editors.",
-  "version": "0.57.7",
+  "version": "0.57.8",
   "license": "MIT",
   "repository": "git://github.com/hopin-team/slate.git",
   "main": "dist/index.js",
