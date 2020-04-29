@@ -18,11 +18,19 @@ import React from '../../packages/slate-react/package.json'
  * Return a Rollup configuration for a `pkg` with `env` and `target`.
  */
 
+function extractPackageName(pkgName) {
+  if (pkgName.includes('@')) {
+    return pkgName.split('/')[1]
+  }
+  return pkgName
+}
+
 function configure(pkg, env, target) {
   const isProd = env === 'production'
   const isUmd = target === 'umd'
   const isModule = target === 'module'
-  const input = `packages/slate/src/index.ts`
+  const pkgName = extractPackageName(pkg.name)
+  const input = `packages/${pkgName}/src/index.ts`
   const deps = []
     .concat(pkg.dependencies ? Object.keys(pkg.dependencies) : [])
     .concat(pkg.peerDependencies ? Object.keys(pkg.peerDependencies) : [])
@@ -43,7 +51,7 @@ function configure(pkg, env, target) {
 
     typescript({
       abortOnError: false,
-      tsconfig: `./packages/slate/tsconfig.json`,
+      tsconfig: `./packages/${pkgName}/tsconfig.json`,
       // COMPAT: Without this flag sometimes the declarations are not updated.
       // clean: isProd ? true : false,
       clean: true,
@@ -52,7 +60,7 @@ function configure(pkg, env, target) {
     // Allow Rollup to resolve CommonJS modules, since it only resolves ES2015
     // modules by default.
     commonjs({
-      exclude: [`packages/slate/src/**`],
+      exclude: [`packages/${pkgName}/src/**`],
       // HACK: Sometimes the CommonJS plugin can't identify named exports, so
       // we have to manually specify named exports here for them to work.
       // https://github.com/rollup/rollup-plugin-commonjs#custom-named-exports
@@ -88,7 +96,7 @@ function configure(pkg, env, target) {
     // Use Babel to transpile the result, limiting it to the source code.
     babel({
       runtimeHelpers: true,
-      include: [`packages/slate/src/**`],
+      include: [`packages/${pkgName}/src/**`],
       extensions: ['.js', '.ts', '.tsx'],
       presets: [
         '@babel/preset-typescript',
@@ -138,7 +146,7 @@ function configure(pkg, env, target) {
       onwarn,
       output: {
         format: 'umd',
-        file: `packages/slate/${isProd ? pkg.umdMin : pkg.umd}`,
+        file: `packages/${pkgName}/${isProd ? pkg.umdMin : pkg.umd}`,
         exports: 'named',
         name: startCase(pkg.name).replace(/ /g, ''),
         globals: pkg.umdGlobals,
@@ -154,12 +162,12 @@ function configure(pkg, env, target) {
       onwarn,
       output: [
         {
-          file: `packages/${extractPackageName(pkg.name)}/${pkg.module}`,
+          file: `packages/${pkgName}/${pkg.module}`,
           format: 'es',
           sourcemap: true,
         },
         {
-          file: `packages/${extractPackageName(pkg.name)}/${pkg.main}`,
+          file: `packages/${pkgName}/${pkg.main}`,
           format: 'cjs',
           exports: 'named',
           sourcemap: true,
@@ -186,13 +194,6 @@ function factory(pkg, options = {}) {
     isProd && configure(pkg, 'development', 'umd', options),
     isProd && configure(pkg, 'production', 'umd', options),
   ].filter(Boolean)
-}
-
-function extractPackageName(pkgName) {
-  if (pkgName.includes('@')) {
-    return pkgName.split('/')[1]
-  }
-  return pkgName
 }
 
 /**
