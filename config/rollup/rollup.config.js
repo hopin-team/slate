@@ -154,12 +154,12 @@ function configure(pkg, env, target) {
       onwarn,
       output: [
         {
-          file: `packages/slate/${pkg.module}`,
+          file: `packages/${extractPackageName(pkg.name)}/${pkg.module}`,
           format: 'es',
           sourcemap: true,
         },
         {
-          file: `packages/slate/${pkg.main}`,
+          file: `packages/${extractPackageName(pkg.name)}/${pkg.main}`,
           format: 'cjs',
           exports: 'named',
           sourcemap: true,
@@ -186,6 +186,13 @@ function factory(pkg, options = {}) {
     isProd && configure(pkg, 'development', 'umd', options),
     isProd && configure(pkg, 'production', 'umd', options),
   ].filter(Boolean)
+}
+
+function extractPackageName(pkgName) {
+  if (pkgName.includes('@')) {
+    return pkgName.split('/')[1]
+  }
+  return pkgName
 }
 
 /**
