@@ -1,5 +1,5 @@
 {
-  "name": "slate",
+  "name": "@hopinhq/slate",
   "description": "A completely customizable framework for building rich text editors.",
   "version": "0.57.7",
   "license": "MIT",
@@ -41,5 +41,5 @@
     "wysiwyg",
     "wysiwym"
   ],
-  "gitHead": "152859b470f0722849df1bc5d25109a8fec21fd5"
+  "gitHead": "99fe1f4bbe920697b79165290fb0dcda3ee5ba5c"
 }
