@@ -2,7 +2,7 @@
   "publishConfig": {
     "access": "restricted"
   },
-  "name": "slate",
+  "name": "@hopinhq/slate",
   "description": "A completely customizable framework for building rich text editors.",
   "version": "0.57.7",
   "license": "MIT",
