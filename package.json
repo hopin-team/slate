@@ -2,7 +2,7 @@
   "private": true,
   "name": "@hopinhq/slate",
   "workspaces": [
-    "packages/*"
+    "packages/slate"
   ],
   "scripts": {
     "build": "yarn build:rollup && yarn build:next",
