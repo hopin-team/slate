@@ -20,6 +20,7 @@ import { DIRTY_PATHS, FLUSHING } from './utils/weak-maps'
  */
 
 export const createEditor = (): Editor => {
+  // test comment
   const editor: Editor = {
     children: [],
     operations: [],
